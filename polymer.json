@@ -1,0 +1,18 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/conference-app.html",
+  "fragments": [
+    "src/conference-schedule.html",
+    "src/conference-view2.html",
+    "src/conference-view3.html"
+  ],
+  "sourceGlobs": [
+   "src/**/*",
+   "images/**/*",
+   "bower.json"
+  ],
+  "includeDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}
