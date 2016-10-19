@@ -4,18 +4,55 @@
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 
+<link rel="import" href="times-countdown.html">
+
 <dom-module id="conference-overview">
   <template>
     <style include="iron-flex">
+      :host {
+        display: block;
+        padding: 1em;
+      }
+      paper-card {
+        width: 100%;
+        margin: 0px;
+        margin-bottom: 1em;
+      }
+      .card-content div {
+        display: inline-block;
+      }
+      .card-content div + div
+      {
+        padding-left: 1em;
+      }
     </style>
 
-    <div class="card">
-    </div>
+    <paper-card heading="До начала конференции осталось">
+      <times-countdown days hours minutes seconds
+        id="timeRemaining"
+        countdown-to="2016-11-04 11:00:00+03">
+      </times-countdown>
+    </paper-card>
+
+    <paper-card heading="Расписание">
+      <template is="dom-repeat" items="{{sessions}}" as="session">
+      <div class="card-content">
+        <div>{{session.time}}</div><div>{{session.title}}</div>
+      </div>
+      </template>
+    </paper-card>
+
   </template>
 
   <script>
     Polymer({
-      is: 'conference-overview'
+      is: 'conference-overview',
+      properties: {
+        sessions: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+      },
     });
   </script>
 </dom-module>

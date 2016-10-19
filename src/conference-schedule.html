@@ -5,9 +5,12 @@
 <dom-module id="conference-schedule">
   <template>
     <style include="iron-flex">
+      :host {
+        display: block;
+        padding: 1em;
+      }
     </style>
     
-    <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessions}}" order-by-child="time"></firebase-query>
     <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
     
     <div class="layout vertical">
@@ -33,7 +36,6 @@
         presenters: {
           type: Object,
           reflectToAttribute: true,
-          observer: '_sessionsChanged'
         },
       },
       _getPresenter: function(presenters, session)
