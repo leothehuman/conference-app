@@ -2,14 +2,16 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="app-auth">
-  <style>
-    .hidden {
-      display: none;
-    }
-  </style>
   <template>
+    <style>
+      .hidden {
+        display: none;
+      }
+    </style>
+
     <firebase-auth id="auth" user="{{user}}" status-known="{{statusKnown}}"></firebase-auth>
-    <div flex layout horizontal>
+
+    <div layout horizontal>
       <paper-button id="signinButton" on-tap="signIn">Войти</paper-button>
       <paper-button id="signoutButton" on-tap="signOut">Выйти</paper-button>
     </div>

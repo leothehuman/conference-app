@@ -1,34 +1,21 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="shared-styles.html">
 <link rel="import" href="session-item.html">
 
 <dom-module id="conference-schedule">
   <template>
-    <style include="shared-styles iron-flex">
-      :host {
-        display: block;
-        padding: 10px;
-      }
+    <style include="iron-flex">
     </style>
+    
     <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessions}}" order-by-child="time"></firebase-query>
     <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
-
+    
     <div class="layout vertical">
       <template is="dom-repeat" items="{{sessions}}" as="session">
         <session-item session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></session-item>
       </template>
     </div>
+
   </template>
 
   <script>
@@ -40,18 +27,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
         },
         sessions: {
-            type: Object,
-            reflectToAttribute: true,
-            observer: '_sessionsChanged'
+          type: Object,
+          reflectToAttribute: true,
         },
         presenters: {
-            type: Object,
-            reflectToAttribute: true,
-            observer: '_sessionsChanged'
+          type: Object,
+          reflectToAttribute: true,
+          observer: '_sessionsChanged'
         },
-      },
-      _sessionsChanged: function(schedule) {
-//        console.log(schedule);
       },
       _getPresenter: function(presenters, session)
       {
