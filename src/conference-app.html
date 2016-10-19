@@ -23,9 +23,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 
+<link rel="import" href="../bower_components/lazy-imports/lazy-imports.html">
+
 <link rel="import" href="conference-icons.html">
 
 <dom-module id="conference-app">
+  <link rel="lazy-import" group="schedule" href="conference-schedule.html">
+  <link rel="lazy-import" group="view2" href="conference-view2.html">
+  <link rel="lazy-import" group="view3" href="conference-view3.html">
+
   <template>
     <style>
       :host {
@@ -68,7 +74,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         database-url="https://magicjudge-d3dda.firebaseio.com"
         storage-bucket="magicjudge-d3dda.appspot.com" >
     </firebase-app>
-    <firebase-document path="/conferences/1/title" data="{{title}}"></firebase-document>
+    <firebase-document path="/conferences/[[conferenceId]]/title" data="{{title}}"></firebase-document>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -105,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="schedule"
             role="main">
-          <conference-schedule name="schedule"></conference-schedule>
+          <conference-schedule name="schedule" conference-id="[[conferenceId]]"></conference-schedule>
           <conference-view2 name="view2"></conference-view2>
           <conference-view3 name="view3"></conference-view3>
         </iron-pages>
@@ -118,8 +124,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'conference-app',
+      behaviors: [Polymer.LazyImportsBehavior],
 
       properties: {
+        conferenceId: {
+          type: String,
+          reflectToAttribute: true,
+        },
         page: {
           type: String,
           reflectToAttribute: true,
@@ -132,18 +143,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ],
 
       _routePageChanged: function(page) {
-        this.page = page || 'schedule';
+        this.page = (page ==='schedule' || page === 'view2' || page === 'view3') ? page : 'schedule';
       },
 
       _pageChanged: function(page) {
-        // Load page import on demand. Show 404 page if fails
-        var resolvedPageUrl = this.resolveUrl('conference-' + page + '.html');
-        this.importHref(resolvedPageUrl, null, this._showPage404, true);
+        this.importLazyGroup(page);
       },
-
-      _showPage404: function() {
-        this.page = 'schedule#now';
-      }
     });
   </script>
 

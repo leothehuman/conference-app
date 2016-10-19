@@ -21,8 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
     </style>
-    <firebase-query id="sessions" path="/conferences/1/sessions" data="{{sessions}}" order-by-child="time"></firebase-query>
-    <firebase-document path="/conferences/1/presenters" data="{{presenters}}"></firebase-document>
+    <firebase-query id="sessions" path="/conferences/[[conferenceId]]/sessions" data="{{sessions}}" order-by-child="time"></firebase-query>
+    <firebase-document path="/conferences/[[conferenceId]]/presenters" data="{{presenters}}"></firebase-document>
 
     <div class="layout vertical">
       <template is="dom-repeat" items="{{sessions}}" as="session">
@@ -35,6 +35,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'conference-schedule',
       properties: {
+        conferenceId: {
+          type: String,
+          reflectToAttribute: true,
+        },
         sessions: {
             type: Object,
             reflectToAttribute: true,
