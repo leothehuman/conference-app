@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
-<link rel="import" href="schedule-item.html">
+<link rel="import" href="session-item.html">
 
 <dom-module id="conference-schedule">
   <template>
@@ -26,7 +26,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="layout vertical">
       <template is="dom-repeat" items="{{sessions}}" as="session">
-        <schedule-item session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></schedule-item>
+        <session-item session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></session-item>
       </template>
     </div>
   </template>
