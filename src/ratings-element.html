@@ -1,0 +1,100 @@
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+
+<dom-module id="ratings-element">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: inline-block;
+        user-select: none;
+        cursor: pointer;
+        padding-top: 4px;
+        padding-bottom: 3px;
+      }
+      :host([readonly])
+      {
+        cursor: default;
+      }
+      :host([rating="1"]) > .one,
+      :host([rating="2"]) > .one,
+      :host([rating="3"]) > .one,
+      :host([rating="4"]) > .one,
+      :host([rating="5"]) > .one,
+      :host([rating="2"]) > .two,
+      :host([rating="3"]) > .two,
+      :host([rating="4"]) > .two,
+      :host([rating="5"]) > .two,
+      :host([rating="3"]) > .three,
+      :host([rating="4"]) > .three,
+      :host([rating="5"]) > .three,
+      :host([rating="4"]) > .four,
+      :host([rating="5"]) > .four,
+      :host([rating="5"]) > .five {
+        color: goldenrod;
+      }
+      span {
+        padding: 4px 8px;
+      }
+    </style>
+    <span class="one">⭑</span>
+    <span class="two">⭑</span>
+    <span class="three">⭑</span>
+    <span class="four">⭑</span>
+    <span class="five">⭑</span>
+  </template>
+  <script>
+    Polymer({
+      is: 'ratings-element',
+      properties: {
+        rating: {
+          reflectToAttribute: true,
+          notify: true,
+        },
+        readonly: {
+          type: Boolean,
+          readonly: true,
+          reflectToAttribute: true,
+        }
+      },
+      ready: function() {
+        // defer until after render!
+        if (this.readonly)
+          return;
+        Polymer.RenderStatus.afterNextRender(this, function() {
+          if (this.tabIndex < 0) {
+            this.tabIndex = 0;
+          }
+          if (!this.role) {
+            this.role = 'slider';
+          }
+          this.listen(this, 'down', '_downHandler');
+          this.listen(this, 'keydown', '_keyHandler');
+        });
+      },
+      _downHandler: function(e) {
+        if (this.readonly)
+          return;
+        var target = Polymer.dom(e).rootTarget;
+        if (target.localName == 'span') {
+          var i = Array.from(Polymer.dom(this.root).querySelectorAll('span')).indexOf(target);
+          target.style.position = 'relative';
+          if (!this._ripple) {
+            this._ripple = document.createElement('paper-ripple');
+          }
+          target.appendChild(this._ripple);
+          this._ripple.uiDownAction(e);
+          this.rating = i + 1;
+        }
+      },
+      _keyHandler: function(e) {
+        if (this.readonly)
+          return;
+        var current = this.rating || 1;
+        if (e.keyCode == 37) {
+          this.rating = Math.max(current - 1, 1);
+        } else if (e.keyCode == 39) {
+          this.rating = Math.min(current + 1, 5);
+        }
+      },
+    });
+  </script>
+</dom-module>

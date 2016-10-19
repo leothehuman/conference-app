@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         database-url="https://magicjudge-d3dda.firebaseio.com"
         storage-bucket="magicjudge-d3dda.appspot.com">
     </firebase-app>
-    <firebase-document path="/conferences/[[conferenceId]]/title" data="{{title}}"></firebase-document>
+    <firebase-document path="/conferences/[[conferenceId]]" data="{{conference}}"></firebase-document>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -94,7 +94,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-toolbar condenses reveals effects="waterfall">
           <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
 
-          <div class="title">{{title}}</div>
+          <div class="title">{{conference.title}}</div>
           <app-auth user="{{user}}"></app-auth>
         </paper-toolbar>
 

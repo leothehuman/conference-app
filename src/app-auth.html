@@ -11,7 +11,6 @@
     <firebase-auth id="auth" user="{{user}}" status-known="{{statusKnown}}"></firebase-auth>
     <div flex layout horizontal>
       <paper-button id="signinButton" on-tap="signIn">Войти</paper-button>
-      <span id="credentials">{{user.displayName}} ({{user.email}})</span>
       <paper-button id="signoutButton" on-tap="signOut">Выйти</paper-button>
     </div>
   </template>
@@ -36,13 +35,11 @@
         if (statusKnown) {
           if (!user) {
             this.$.signinButton.classList.remove("hidden");
-            this.$.credentials.classList.add("hidden");
             this.$.signoutButton.classList.add("hidden");
           }
           else
           {
             this.$.signoutButton.classList.remove("hidden");
-            this.$.credentials.classList.remove("hidden");
             this.$.signinButton.classList.add("hidden");
           }
         }

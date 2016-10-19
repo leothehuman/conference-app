@@ -18,6 +18,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="ratings-element.html">
 
 <dom-module id="schedule-item">
   <template>
@@ -59,7 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="card-content layout horizontal wrap">
         <div id="time">[[session.time]]</div>
         <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
-        <div id="rating"></div>
+        <ratings-element readonly style="font-size: 3em;"></ratings-element>
       </div>
       <div class="card-actions" hidden="[[!session.active]]">
         <div class="layout horizontal">
