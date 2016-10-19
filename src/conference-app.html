@@ -23,11 +23,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../bower_components/lazy-imports/lazy-imports.html">
 
 <link rel="import" href="conference-icons.html">
+<link rel="import" href="app-auth.html">
 
 <dom-module id="conference-app">
   <link rel="lazy-import" group="schedule" href="conference-schedule.html">
@@ -43,18 +43,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
       }
 
-      app-header {
-        color: #fff;
-        background-color: var(--app-primary-color);
-      }
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-
       .drawer-list {
         margin: 0 20px;
       }
-
       .drawer-list a {
         display: block;
         padding: 0 16px;
@@ -62,15 +53,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-secondary-color);
         line-height: 40px;
       }
-
       .drawer-list a.iron-selected {
         color: black;
-
         font-weight: bold;
-      }
-
-      .hidden {
-        display: none;
       }
     </style>
 
@@ -78,10 +63,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         api-key="AIzaSyCYAWT1EdbjYhIwR5tsnCf0TQ2zkFZYIvk"
         auth-domain="magicjudge-d3dda.firebaseapp.com"
         database-url="https://magicjudge-d3dda.firebaseio.com"
-        storage-bucket="magicjudge-d3dda.appspot.com" >
+        storage-bucket="magicjudge-d3dda.appspot.com">
     </firebase-app>
     <firebase-document path="/conferences/[[conferenceId]]/title" data="{{title}}"></firebase-document>
-    <firebase-auth id="auth" user="{{user}}" status-known="{{statusKnown}}"></firebase-auth>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -111,12 +95,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
 
           <div class="title">{{title}}</div>
-
-          <paper-button id="signinButton" on-tap="signIn">Войти</paper-button>
-
-          <div id="credentials">{{user.displayName}} ({{user.email}})</div>
-
-          <paper-button id="signoutButton" on-tap="signOut">Выйти</paper-button>
+          <app-auth user="{{user}}"></app-auth>
         </paper-toolbar>
 
         <iron-pages
@@ -155,12 +134,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           reflectToAttribute: true,
           notify: true,
         },
-        statusKnown: Boolean,
       },
 
       observers: [
         '_routePageChanged(routeData.page)',
-        '_autoAuth(user, statusKnown)',
       ],
 
       _routePageChanged: function(page) {
@@ -169,31 +146,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _pageChanged: function(page) {
         this.importLazyGroup(page);
-      },
-
-      _autoAuth: function(user, statusKnown) {
-        if (statusKnown) {
-          if (!user) {
-            this.$.signinButton.classList.remove("hidden");
-            this.$.credentials.classList.add("hidden");
-            this.$.signoutButton.classList.add("hidden");
-          }
-          else
-          {
-            this.$.signoutButton.classList.remove("hidden");
-            this.$.credentials.classList.remove("hidden");
-            this.$.signinButton.classList.add("hidden");
-          }
-        }
-      },
-
-      signIn: function() {
-        console.log("Signing in");
-        this.$.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      },
-      signOut: function() {
-        console.log("Signing out");
-        this.$.auth.signOut();
       },
 
     });
