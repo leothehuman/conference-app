@@ -9,11 +9,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="shared-styles.html">
 
@@ -56,12 +58,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!--div id="key">[[session.$key]]</div-->
       <div class="card-content layout horizontal wrap">
         <div id="time">[[session.time]]</div>
-        <div id="presenter" class="flex" >[[presenter.first_name]] [[presenter.last_name]]</div>
+        <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
         <div id="rating"></div>
       </div>
       <div class="card-actions" hidden="[[!session.active]]">
         <div class="layout horizontal">
-          <paper-icon-button id="feedback" icon="communication:comment"></paper-icon-button>
+          <paper-icon-button id="feedback" icon="communication:comment" on-tap="_feedbackClick"></paper-icon-button>
           <div class="flex"></div>
         </div>
       </div>
@@ -72,10 +74,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
       is: 'schedule-item',
       properties: {
-        session: Object,
-        presenter: Object,
-        feedback: Object,
+        session: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+        presenter: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+        feedback: {
+          type: Object,
+          reflectToAttribute: true,
+        },
       },
+      _feedbackClick: function(e) {
+        console.log("feedback clicked");
+        console.log(e);
+      }
     });
   </script>
 </dom-module>

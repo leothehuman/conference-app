@@ -23,7 +23,8 @@
     "paper-header-panel": "PolymerElements/paper-header-panel#^1.1.7",
     "paper-toolbar": "PolymerElements/paper-toolbar#^1.1.7",
     "paper-drawer-panel": "PolymerElements/paper-drawer-panel#^1.0.10",
-    "lazy-imports": "Polymer/lazy-imports#^0.0.2"
+    "lazy-imports": "Polymer/lazy-imports#^0.0.2",
+    "paper-dialog": "PolymerElements/paper-dialog#^1.1.0"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

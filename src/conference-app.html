@@ -22,6 +22,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../bower_components/lazy-imports/lazy-imports.html">
 
@@ -66,6 +68,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         font-weight: bold;
       }
+
+      .hidden {
+        display: none;
+      }
     </style>
 
     <firebase-app
@@ -75,6 +81,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         storage-bucket="magicjudge-d3dda.appspot.com" >
     </firebase-app>
     <firebase-document path="/conferences/[[conferenceId]]/title" data="{{title}}"></firebase-document>
+    <firebase-auth id="auth" user="{{user}}" status-known="{{statusKnown}}"></firebase-auth>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -86,26 +93,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Drawer content -->
       <paper-header-panel drawer>
-        <paper-toolbar>
-          <div>Конференция</div>
-        </paper-toolbar>
-        <div>
+
+        <paper-toolbar><div>Конференция</div></paper-toolbar>
+
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="schedule" href="/schedule">Расписание</a>
           <a name="view2" href="/view2">View Two</a>
           <a name="view3" href="/view3">View Three</a>
         </iron-selector>
-        </div>
+
       </paper-header-panel>
 
       <!-- Main content -->
       <paper-header-panel main>
+
         <paper-toolbar condenses reveals effects="waterfall">
           <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-          <div main-title>{{title}}</div>
+
+          <div class="title">{{title}}</div>
+
+          <paper-button id="signinButton" on-tap="signIn">Войти</paper-button>
+
+          <div id="credentials">{{user.displayName}} ({{user.email}})</div>
+
+          <paper-button id="signoutButton" on-tap="signOut">Выйти</paper-button>
         </paper-toolbar>
 
-        <div>
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
@@ -115,7 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <conference-view2 name="view2"></conference-view2>
           <conference-view3 name="view3"></conference-view3>
         </iron-pages>
-        </div>
+
       </paper-header-panel>
       
     </paper-drawer-panel>
@@ -124,6 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     Polymer({
       is: 'conference-app',
+
       behaviors: [Polymer.LazyImportsBehavior],
 
       properties: {
@@ -135,11 +149,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
-        }
+        },
+        user: {
+          type: Object,
+          reflectToAttribute: true,
+          notify: true,
+        },
+        statusKnown: Boolean,
       },
 
       observers: [
-        '_routePageChanged(routeData.page)'
+        '_routePageChanged(routeData.page)',
+        '_autoAuth(user, statusKnown)',
       ],
 
       _routePageChanged: function(page) {
@@ -149,6 +170,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged: function(page) {
         this.importLazyGroup(page);
       },
+
+      _autoAuth: function(user, statusKnown) {
+        if (statusKnown) {
+          if (!user) {
+            this.$.signinButton.classList.remove("hidden");
+            this.$.credentials.classList.add("hidden");
+            this.$.signoutButton.classList.add("hidden");
+          }
+          else
+          {
+            this.$.signoutButton.classList.remove("hidden");
+            this.$.credentials.classList.remove("hidden");
+            this.$.signinButton.classList.add("hidden");
+          }
+        }
+      },
+
+      signIn: function() {
+        console.log("Signing in");
+        this.$.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      },
+      signOut: function() {
+        console.log("Signing out");
+        this.$.auth.signOut();
+      },
+
     });
   </script>
 
