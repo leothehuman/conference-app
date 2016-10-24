@@ -44,20 +44,24 @@ Example:
         padding-left: 0.5em;
         padding-right: 0.5em;
       }
-      #countdown div {
+      #countdown div div {
         font-size: 3em;
         margin: 1pt;
       }
     </style>
 
-    <div id="countdown" class="layout horizontal center-justified">
-      <div id="countdown-days" hidden$=[[!_showDays]]>[[_countdownDays]]</div>
-      <div hidden$=[[!_showDays]] class="spacer">[[_daysDescription]]</div>
-      <div id="countdown-hours" hidden$=[[!hours]]>[[_countdownHours]]</div>
-      <div hidden$=[[!hours]]>:</div>
-      <div id="countdown-minutes">[[_countdownMinutes]]</div>
-      <div hidden$=[[!seconds]]>:</div>
-      <div id="countdown-seconds" hidden$=[[!seconds]]>[[_countdownSeconds]]</div>
+    <div id="countdown" class="layout horizontal wrap center-justified">
+      <div hidden$=[[!_showDays]] class="layout horizontal center-justified">
+        <div id="countdown-days" hidden$=[[!_showDays]]>[[_countdownDays]]</div>
+        <div hidden$=[[!_showDays]] class="spacer">[[_daysDescription]]</div>
+      </div>
+      <div class="layout horizontal center-justified">
+        <div id="countdown-hours" hidden$=[[!hours]]>[[_countdownHours]]</div>
+        <div hidden$=[[!hours]]>:</div>
+        <div id="countdown-minutes">[[_countdownMinutes]]</div>
+        <div hidden$=[[!seconds]]>:</div>
+        <div id="countdown-seconds" hidden$=[[!seconds]]>[[_countdownSeconds]]</div>
+      </div>
     </div>
   </template>
 
