@@ -3,31 +3,31 @@
     "conferences": {
 	    ".read": "true",
       "$conference_id": {
-        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()",
-      },
+        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()"
+      }
     },
 		"presenters": {
       ".read": "true",
       "$conference_id": {
-        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()",
-      },
+        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()"
+      }
     },
     "sessions": {
       ".read": "true",
       "$conference_id": {
-        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()",
-      },
+        ".write": "auth != null && root.child('managers/' + $conference_id + '/' + auth.uid).exists()"
+      }
     },
     "managers": {
       ".read": "true",
       "$conference_id": {
-        ".write": "auth != null && ((!data.exists() && newData.child(auth.uid).exists()) || root.child('managers/' + $conference_id + '/' + auth.uid).exists())",
-      },
+        ".write": "auth != null && ((!data.exists() && newData.child(auth.uid).exists()) || root.child('managers/' + $conference_id + '/' + auth.uid).exists())"
+      }
     },
     "feedback": {
       
     },
     ".read": "auth != null && auth.uid == '2TUQHPPWrhZjkVT35brk3TDc4Sd2'",
-    ".write": "auth != null && auth.uid == '2TUQHPPWrhZjkVT35brk3TDc4Sd2'",
+    ".write": "auth != null && auth.uid == '2TUQHPPWrhZjkVT35brk3TDc4Sd2'"
   }
 }
