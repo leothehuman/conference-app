@@ -13,8 +13,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="../bower_components/moment/moment.js"></script>
 
 <!--
-An element providing a solution to no problem in particular.
-
 Example:
 
     <times-countdown></times-countdown>
@@ -25,8 +23,6 @@ Example:
       days hours seconds
       countdown-to="2016-11-08">
     </times-countdown>
-
-@demo demo/index.html
 -->
 
 <dom-module id="times-countdown">
@@ -36,24 +32,24 @@ Example:
         display: block;
         text-align: center;
       }
-      div {
-        margin: 0px;
-        padding: 0px;
-      }
-      .spacer {
+      #countdown div {
         padding-left: 0.5em;
         padding-right: 0.5em;
       }
       #countdown div div {
+        padding: 0px;
         font-size: 3em;
         margin: 1pt;
+      }
+      #countdown div div.spacer {
+        padding-left: 0.5em;
       }
     </style>
 
     <div id="countdown" class="layout horizontal wrap center-justified">
       <div hidden$=[[!_showDays]] class="layout horizontal center-justified">
-        <div id="countdown-days" hidden$=[[!_showDays]]>[[_countdownDays]]</div>
-        <div hidden$=[[!_showDays]] class="spacer">[[_daysDescription]]</div>
+        <div id="countdown-days">[[_countdownDays]]</div>
+        <div class="spacer">[[_daysDescription]]</div>
       </div>
       <div class="layout horizontal center-justified">
         <div id="countdown-hours" hidden$=[[!hours]]>[[_countdownHours]]</div>
@@ -122,13 +118,6 @@ Example:
       // Element Lifecycle
 
       ready: function() {
-        // `ready` is called after all elements have been configured, but
-        // propagates bottom-up. This element's children are ready, but parents
-        // are not.
-        //
-        // This is the point where you should make modifications to the DOM (when
-        // necessary), or kick off any processes the element wants to perform.
-
         if (this.seconds) {
           this.updateInterval = 1000; // 1s
         } else {
@@ -164,14 +153,14 @@ Example:
         if (this._countdownDays > 0)
         {
           if (this._countdownDays > 4) {
-            this._daysDescription = 'дней ';
+            this._daysDescription = 'дней';
           } else if (this._countdownDays > 1) {
             this._daysDescription = 'дня';
           } else {
             this._daysDescription = 'день';
           }
         } else {
-          this._daysDescription = ' ';
+          this._daysDescription = '';
         }
         this._showDays = this.days && this._countdownDays;
 
