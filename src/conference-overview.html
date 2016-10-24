@@ -7,6 +7,7 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <link rel="import" href="times-countdown.html">
+<link rel="import" href="session-item-short.html">
 
 <script src="../bower_components/moment/moment.js"></script>
 
@@ -22,15 +23,6 @@
         margin: 0px;
         margin-bottom: 1em;
       }
-      .time {
-        display: inline-block;
-        font-size: smaller;
-      }
-      .presenter {
-        display: inline-block;
-        color: gray;
-        font-size: smaller;
-      }
       ul {
         margin: 0px;
         padding: 0px;
@@ -41,12 +33,6 @@
         padding: 0px;
         padding-bottom: 10pt;
         padding-left: 1em;
-      }
-      paper-icon-button {
-        color: red;
-      }
-      .hidden {
-        display: none;
       }
       .title-text {
         padding-left: 0px;
@@ -62,22 +48,11 @@
 
     <paper-card heading="Расписание">
       <ul>
-      <template is="dom-repeat" items="{{sessions}}" as="session">
-      
-      <li class="layout horizontal">
-        <div class="layout vertical flex">
-          <div class="flex">
-            <div class="time">[[_formatTime(session.time)]]</div>
-            <div class="presenter flex">[[_formatPresenterName(session.presenter)]]</div>
-          </div>
-          <div class="title">[[session.title]]</div>
-        </div>
-        <div>
-          <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session)}}"></paper-icon-button>
-        </div>
-      </li>
-      
-      </template>
+        <template is="dom-repeat" items="{{sessions}}" as="session">
+          <li class="layout horizontal">
+            <session-item-short session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></session-item-short>
+          </li>
+        </template>
       </ul>
     </paper-card>
 
@@ -107,19 +82,9 @@
         },
 
       },
-      _formatTime: function(time) {
-        return new moment(time).format('HH:mm');
-      },
-      _formatPresenterName: function(presenterId) {
-        var presenter = this.presenters[presenterId];
-        return presenter.first_name + ' ' + presenter.last_name;
-      },
-      _computeFeedbackClass: function(session) {
-        if (!session.started)
-          return "hidden";
-        if (!this.user)
-          return "hidden";
-        return "active";
+      _getPresenter: function(presenters, session)
+      {
+        return presenters[session.presenter];
       }
     });
   </script>

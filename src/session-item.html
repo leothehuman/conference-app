@@ -52,7 +52,9 @@
       <!--div id="key">[[session.$key]]</div-->
       <div class="card-content layout horizontal wrap">
         <div id="time">[[_formatTime(session.time)]]</div>
-        <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
+        <template is="dom-if" if="presenter">
+          <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
+        </template>
         <!--ratings-element readonly style="font-size: 3em;"></ratings-element-->
         <session-ratings-assembly ratings="[[session.ratings]]"><session-ratings-assembly>
       </div>
