@@ -7,7 +7,9 @@
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="ratings-element.html">
+<link rel="import" href="session-ratings-assembly.html">
+
+<script src="../bower_components/moment/moment.js"></script>
 
 <dom-module id="session-item">
   <template>
@@ -49,9 +51,10 @@
     <paper-card heading="[[session.title]]">
       <!--div id="key">[[session.$key]]</div-->
       <div class="card-content layout horizontal wrap">
-        <div id="time">[[session.time]]</div>
+        <div id="time">[[_formatTime(session.time)]]</div>
         <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
-        <ratings-element readonly style="font-size: 3em;"></ratings-element>
+        <!--ratings-element readonly style="font-size: 3em;"></ratings-element-->
+        <session-ratings-assembly ratings="[[session.ratings]]"><session-ratings-assembly>
       </div>
       <div class="card-actions" hidden="[[!session.active]]">
         <div class="layout horizontal">
@@ -82,6 +85,9 @@
       _feedbackClick: function(e) {
         console.log("feedback clicked");
         console.log(e);
+      },
+      _formatTime: function(time) {
+        return new moment(time).format('HH:mm');
       }
     });
   </script>

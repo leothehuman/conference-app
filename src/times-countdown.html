@@ -51,8 +51,8 @@ Example:
     </style>
 
     <div id="countdown" class="layout horizontal center-justified">
-      <div id="countdown-days" hidden$=[[!days]]>[[_countdownDays]]</div>
-      <div hidden$=[[!_countdownDays]] class="spacer">[[_daysDescription]]</div>
+      <div id="countdown-days" hidden$=[[!_showDays]]>[[_countdownDays]]</div>
+      <div hidden$=[[!_showDays]] class="spacer">[[_daysDescription]]</div>
       <div id="countdown-hours" hidden$=[[!hours]]>[[_countdownHours]]</div>
       <div hidden$=[[!hours]]>:</div>
       <div id="countdown-minutes">[[_countdownMinutes]]</div>
@@ -148,18 +148,14 @@ Example:
 
         this._countdownDays = this.days ? then.diff(now, 'days') : 0;
 
-        if (this.hours || this.minutes || this.seconds) {
-          this._countdownHours = then.subtract(this.days ? this._countdownDays : 0, 'days')
-            .diff(now, 'hours');
+        this._countdownHours = then.subtract(this.days ? this._countdownDays : 0, 'days')
+          .diff(now, 'hours');
 
-          this._countdownMinutes = then.subtract(this.hours ? this._countdownHours : 0, 'hours')
-            .diff(now, 'minutes');
+        this._countdownMinutes = then.subtract(this.hours ? this._countdownHours : 0, 'hours')
+          .diff(now, 'minutes');
 
-          this._countdownSeconds = then.subtract(this._countdownMinutes, 'minutes')
-            .diff(now, 'seconds');
-        } else {
-          this._countdownDays += 1;
-        }
+        this._countdownSeconds = then.subtract(this._countdownMinutes, 'minutes')
+          .diff(now, 'seconds');
 
         if (this._countdownDays > 0)
         {
@@ -172,8 +168,8 @@ Example:
           }
         } else {
           this._daysDescription = ' ';
-          this.days = false;
         }
+        this._showDays = this.days && this._countdownDays;
 
         if (this._countdownHours < 10)
           this._countdownHours = '0' + this._countdownHours;

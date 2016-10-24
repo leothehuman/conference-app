@@ -1,10 +1,14 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 
 <link rel="import" href="times-countdown.html">
+
+<script src="../bower_components/moment/moment.js"></script>
 
 <dom-module id="conference-overview">
   <template>
@@ -18,28 +22,63 @@
         margin: 0px;
         margin-bottom: 1em;
       }
-      .card-content div {
+      .time {
         display: inline-block;
+        font-size: smaller;
       }
-      .card-content div + div
-      {
+      .presenter {
+        display: inline-block;
+        color: gray;
+        font-size: smaller;
+      }
+      ul {
+        margin: 0px;
+        padding: 0px;
+
+      }
+      li {
+        margin: 0px;
+        padding: 0px;
+        padding-bottom: 10pt;
         padding-left: 1em;
+      }
+      paper-icon-button {
+        color: red;
+      }
+      .hidden {
+        display: none;
+      }
+      .title-text {
+        padding-left: 0px;
       }
     </style>
 
     <paper-card heading="До начала конференции осталось">
-      <times-countdown days hours minutes seconds
+      <times-countdown days hours seconds
         id="timeRemaining"
-        countdown-to="2016-11-04 11:00:00+03">
+        countdown-to="{{conference.start}}">
       </times-countdown>
     </paper-card>
 
     <paper-card heading="Расписание">
+      <ul>
       <template is="dom-repeat" items="{{sessions}}" as="session">
-      <div class="card-content">
-        <div>{{session.time}}</div><div>{{session.title}}</div>
-      </div>
+      
+      <li class="layout horizontal">
+        <div class="layout vertical flex">
+          <div class="flex">
+            <div class="time">[[_formatTime(session.time)]]</div>
+            <div class="presenter flex">[[_formatPresenterName(session.presenter)]]</div>
+          </div>
+          <div class="title">[[session.title]]</div>
+        </div>
+        <div>
+          <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session)}}"></paper-icon-button>
+        </div>
+      </li>
+      
       </template>
+      </ul>
     </paper-card>
 
   </template>
@@ -48,11 +87,40 @@
     Polymer({
       is: 'conference-overview',
       properties: {
-        sessions: {
+        
+        conference: {
           type: Object,
           reflectToAttribute: true,
         },
+        sessions: {
+          type: Object,
+          reflectToAttribute: true,
+          observe: true,
+        },
+        presenters: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+        user: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+
       },
+      _formatTime: function(time) {
+        return new moment(time).format('HH:mm');
+      },
+      _formatPresenterName: function(presenterId) {
+        var presenter = this.presenters[presenterId];
+        return presenter.first_name + ' ' + presenter.last_name;
+      },
+      _computeFeedbackClass: function(session) {
+        if (!session.started)
+          return "hidden";
+        if (!this.user)
+          return "hidden";
+        return "active";
+      }
     });
   </script>
 </dom-module>

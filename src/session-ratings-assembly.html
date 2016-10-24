@@ -1,0 +1,53 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="ratings-element.html">
+
+<dom-module id="session-ratings-assembly">
+  <template strip-whitespace>
+    <style>
+      :host {
+        display: inline-block;
+        user-select: none;
+      }
+    </style>
+    <div layout horizontal>
+      <iron-icon icon="icons:build"></iron-icon>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.useful}}" style="font-size: 3em;"></ratings-element>
+    </div>
+    <div layout horizontal>
+      <iron-icon icon="editor:insert-emoticon"></iron-icon>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.interesting}}" style="font-size: 3em;"></ratings-element>
+    </div>
+    <div layout horizontal>
+      <iron-icon icon="icons:visibility"></iron-icon>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.presentable}}" style="font-size: 3em;"></ratings-element>
+    </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'session-ratings-assembly',
+      properties: {
+        ratings: {
+          type: Object,
+          reflectToAttribute: true,
+          notify: true,
+          value: function() {
+            return {useful: '0', interesting: '0', presentable: '0'};
+          }
+        },
+        readonly: {
+          type: Boolean,
+          readonly: true,
+          reflectToAttribute: true,
+        }
+      },
+    });
+  </script>
+</dom-module>

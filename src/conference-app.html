@@ -62,6 +62,7 @@
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
     <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessions}}" order-by-child="time"></firebase-query>
+    <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
 
     <paper-drawer-panel is="div" fullbleed class="flex">
 
@@ -92,8 +93,22 @@
             attr-for-selected="name"
             fallback-selection="schedule"
             role="main">
-          <conference-overview name="overview" sessions="[[sessions]]" conference-id="[[conferenceId]]"></conference-overview>
-          <conference-schedule name="schedule" sessions="[[sessions]]" conference-id="[[conferenceId]]"></conference-schedule>
+
+          <conference-overview 
+            name="overview"
+            user="[[user]]"
+            sessions="[[sessions]]"
+            presenters="[[presenters]]"
+            conference-id="[[conferenceId]]"
+            conference="[[conference]]">
+          </conference-overview>
+
+          <conference-schedule 
+            name="schedule"
+            sessions="[[sessions]]"
+            conference-id="[[conferenceId]]">
+          </conference-schedule>
+
         </iron-pages>
 
       </paper-header-panel>
@@ -123,6 +138,10 @@
           notify: true,
         },
         sessions: {
+          type: Object,
+          reflectToAttribute: true,
+        },
+        presenters: {
           type: Object,
           reflectToAttribute: true,
         },
