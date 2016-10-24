@@ -1,6 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="session-item.html">
+
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+
+<link rel="import" href="session-item-short.html">
 
 <dom-module id="conference-schedule">
   <template>
@@ -9,15 +12,35 @@
         display: block;
         padding: 1em;
       }
+      paper-card {
+        width: 100%;
+        margin: 0px;
+        margin-bottom: 1em;
+      }
+      ul {
+        margin: 0px;
+        padding: 0px;
+
+      }
+      li {
+        margin: 0px;
+        padding: 0px;
+        padding-bottom: 10pt;
+        padding-left: 1em;
+      }
     </style>
     
     <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
     
-    <div class="layout vertical">
-      <template is="dom-repeat" items="{{sessions}}" as="session">
-        <session-item session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></session-item>
-      </template>
-    </div>
+    <paper-card class="layout vertical" heading="Расписание">
+      <ul>
+        <template is="dom-repeat" items="{{sessions}}" as="session">
+          <li class="layout horizontal">
+            <session-item-short session="[[session]]" presenter="[[_getPresenter(presenters, session)]]"></session-item-short>
+          </li>
+        </template>
+      </ul>
+    </paper-card>
 
   </template>
 

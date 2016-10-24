@@ -11,65 +11,45 @@
 
 <script src="../bower_components/moment/moment.js"></script>
 
-<dom-module id="session-item">
+<dom-module id="session-item-short">
   <template>
     <style include="iron-flex">
       :host {
         display: block;
         padding: 0px;
       }
-      paper-card {
-        width: 100%;
-        margin: 0px;
-        margin-bottom: 1em;
+      .time {
+        display: inline-block;
+        font-size: smaller;
       }
-      .card-content div
-      {
-        padding-top: 1em;
-        padding-bottom: 1em;
-        padding-right: 1em;
-      }
-      .card-content {
-        border-top: 1px solid #e8e8e8;
-      }
-      #presenter {
+      .presenter {
+        display: inline-block;
         color: gray;
+        font-size: smaller;
       }
       paper-icon-button {
-        color: gray;
-      }
-      #feedback {
-      }
-      .red {
         color: red;
       }
-      .green {
-        color: green;
+      .hidden {
+        display: none;
       }
     </style>
 
-    <paper-card heading="[[session.title]]">
-      <!--div id="key">[[session.$key]]</div-->
-      <div class="card-content layout horizontal wrap">
-        <div id="time">[[_formatTime(session.time)]]</div>
-        <template is="dom-if" if="presenter">
-          <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
-        </template>
-        <!--ratings-element readonly style="font-size: 3em;"></ratings-element-->
-        <session-ratings-assembly ratings="[[session.ratings]]"><session-ratings-assembly>
+    <div class="layout vertical flex">
+      <div class="flex">
+        <div class="time">[[_formatTime(session.time)]]</div>
+        <div class="presenter flex">[[presenter.first_name]] [[presenter.last_name]]</div>
       </div>
-      <div class="card-actions" hidden="[[!session.active]]">
-        <div class="layout horizontal">
-          <paper-icon-button id="feedback" icon="communication:comment" on-tap="_feedbackClick"></paper-icon-button>
-          <div class="flex"></div>
-        </div>
-      </div>
-    </paper-card>
+      <div class="title">[[session.title]]</div>
+    </div>
+    <div>
+      <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session)}}"></paper-icon-button>
+    </div>
   </template>
 
   <script>
     Polymer({
-      is: 'session-item',
+      is: 'session-item-short',
       properties: {
         session: {
           type: Object,
@@ -84,13 +64,20 @@
           reflectToAttribute: true,
         },
       },
+      _computeFeedbackClass: function(session) {
+        if (!session.started)
+          return "hidden";
+        if (!this.user)
+          return "hidden";
+        return "active";
+      },
       _feedbackClick: function(e) {
         console.log("feedback clicked");
         console.log(e);
       },
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');
-      }
+      },
     });
   </script>
 </dom-module>
