@@ -1,5 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bower_components/app-route/app-location.html">
+
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/communication-icons.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
@@ -35,10 +37,13 @@
       }
     </style>
 
-    <div class="layout vertical flex">
+    <div class="layout vertical flex" on-tap="openSession">
       <div class="flex">
         <div class="time">[[_formatTime(session.time)]]</div>
-        <div class="presenter flex">[[presenter.first_name]] [[presenter.last_name]]</div>
+        <div class="presenter flex">
+          <span>[[presenter.first_name]]</span>
+          <span>[[presenter.last_name]]</span>
+        </div>
       </div>
       <div class="title">[[session.title]]</div>
     </div>
@@ -78,6 +83,9 @@
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');
       },
+      openSession: function() {
+        window.location = '/session/' + this.session.$key;
+      }
     });
   </script>
 </dom-module>

@@ -5,18 +5,19 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="session-ratings-assembly.html">
 
 <script src="../bower_components/moment/moment.js"></script>
 
-<dom-module id="session-item">
+<dom-module id="session-detail">
   <template>
     <style include="iron-flex">
       :host {
         display: block;
-        padding: 0px;
+        padding: 1em;
       }
       paper-card {
         width: 100%;
@@ -25,7 +26,6 @@
       }
       .card-content div
       {
-        padding-top: 1em;
         padding-bottom: 1em;
         padding-right: 1em;
       }
@@ -35,34 +35,50 @@
       #presenter {
         color: gray;
       }
-      paper-icon-button {
-        color: gray;
-      }
     </style>
 
+    <app-route
+        route="{{route}}"
+        pattern="/:id"
+        data="{{routeData}}"
+        tail="{{subroute}}">
+    </app-route>
+
+    <firebase-document path="/sessions/[[conferenceId]]/[[routeData.id]]" data="{{session}}"></firebase-document>
+    <firebase-document path="/presenters/[[conferenceId]]/[[session.presenter]]" data="{{presenter}}"></firebase-document>
+    <firebase-document path="/feedback/[[conferenceId]]/[[routeData.id]]/[[user.uid]]" data="{{feedback}}"></firebase-document>
+
     <paper-card heading="[[session.title]]">
-      <!--div id="key">[[session.$key]]</div-->
-      <div class="card-content layout horizontal wrap">
-        <div id="time">[[_formatTime(session.time)]]</div>
-        <template is="dom-if" if="presenter">
-          <div id="presenter" class="flex">[[presenter.first_name]] [[presenter.last_name]]</div>
-        </template>
-        <!--ratings-element readonly style="font-size: 3em;"></ratings-element-->
-        <session-ratings-assembly ratings="[[session.ratings]]"><session-ratings-assembly>
+      <div class="card-content layout vertical">
+        <div class="layout horizontal">
+          <div id="time">[[_formatTime(session.time)]]</div>
+          <template is="dom-if" if="presenter">
+            <div id="presenter">
+              <span>[[presenter.first_name]]</span>
+              <span>[[presenter.last_name]]</span>
+            </div>
+          </template>
+        </div>
+        <session-ratings-assembly ratings="{{feedback}}"></session-ratings-assembly>
+        <paper-input label="Комментарии" value="{{feedback.comment}}" placeholder=""></paper-input>
       </div>
-      <div class="card-actions" hidden="[[!session.active]]">
+      <!--div class="card-actions" hidden="[[!session.active]]">
         <div class="layout horizontal">
           <paper-icon-button id="feedback" icon="communication:comment" on-tap="_feedbackClick"></paper-icon-button>
           <div class="flex"></div>
         </div>
-      </div>
+      </div-->
     </paper-card>
   </template>
 
   <script>
     Polymer({
-      is: 'session-item',
+      is: 'session-detail',
       properties: {
+        user: {
+          type: Object,
+          reflectToAttribute: true,
+        },
         session: {
           type: Object,
           reflectToAttribute: true,
@@ -82,7 +98,7 @@
       },
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');
-      }
+      },
     });
   </script>
 </dom-module>

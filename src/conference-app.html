@@ -22,6 +22,7 @@
 <dom-module id="conference-app">
   <link rel="lazy-import" group="overview" href="conference-overview.html">
   <link rel="lazy-import" group="schedule" href="conference-schedule.html">
+  <link rel="lazy-import" group="session" href="session-detail.html">
   
   <template>
     <style>
@@ -55,12 +56,14 @@
         storage-bucket="magicjudge-d3dda.appspot.com">
     </firebase-app>
     <firebase-document path="/conferences/[[conferenceId]]" data="{{conference}}"></firebase-document>
+
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
         pattern="/:page"
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
+
     <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessions}}" order-by-child="time"></firebase-query>
     <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
 
@@ -106,8 +109,16 @@
           <conference-schedule 
             name="schedule"
             sessions="[[sessions]]"
+            presenters="[[presenters]]"
             conference-id="[[conferenceId]]">
           </conference-schedule>
+
+          <session-detail
+            name="session"
+            user="[[user]]"
+            conference-id="[[conferenceId]]"
+            route="[[subroute]]">
+          </session-detail>
 
         </iron-pages>
 
@@ -152,7 +163,7 @@
       ],
 
       _routePageChanged: function(page) {
-        this.page = (page ==='overview' || page === 'schedule') ? page : 'overview';
+        this.page = (page === 'overview' || page === 'schedule' || page === 'session') ? page : 'overview';
       },
 
       _pageChanged: function(page) {

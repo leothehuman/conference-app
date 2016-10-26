@@ -16,18 +16,34 @@
         display: inline-block;
         user-select: none;
       }
+      iron-icon {
+        margin-bottom: 16px;
+        margin-right: 16px;
+      }
+      ratings-element {
+        font-size: 3em;
+      }
     </style>
+    <div>
+      Польза
+    </div>
     <div layout horizontal>
       <iron-icon icon="icons:build"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.useful}}" style="font-size: 3em;"></ratings-element>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.useful}}"></ratings-element>
+    </div>
+    <div>
+      Интерес
     </div>
     <div layout horizontal>
       <iron-icon icon="editor:insert-emoticon"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.interesting}}" style="font-size: 3em;"></ratings-element>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.interesting}}"></ratings-element>
+    </div>
+    <div>
+      Наглядность
     </div>
     <div layout horizontal>
       <iron-icon icon="icons:visibility"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.presentable}}" style="font-size: 3em;"></ratings-element>
+      <ratings-element readonly?=[[readonly]] rating="{{ratings.presentable}}"></ratings-element>
     </div>
   </template>
   <script>
