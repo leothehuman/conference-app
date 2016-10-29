@@ -5,7 +5,7 @@
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 
 <link rel="import" href="session-ratings-assembly.html">
@@ -59,12 +59,12 @@
             </div>
           </template>
         </div>
-        <session-ratings-assembly ratings="{{feedback}}"></session-ratings-assembly>
-        <paper-input label="Комментарии" value="{{feedback.comment}}" placeholder=""></paper-input>
+        <session-ratings-assembly ratings="{{feedback}}" readonly$=[[feedback.submitted]]></session-ratings-assembly>
+        <paper-textarea label="Комментарии" value="{{feedback.comment}}" readonly$=[[feedback.submitted]]></paper-textarea>
       </div>
-      <!--div class="card-actions" hidden="[[!session.active]]">
+      <div class="card-actions" hidden$=[[feedback.submitted]]>
         <div class="layout horizontal">
-          <paper-icon-button id="feedback" icon="communication:comment" on-tap="_feedbackClick"></paper-icon-button>
+          <paper-icon-button id="feedback" icon="icons:assignment-turned-in" on-tap="_feedbackClick" alt="Отправить"></paper-icon-button>
           <div class="flex"></div>
         </div>
       </div-->
@@ -93,8 +93,7 @@
         },
       },
       _feedbackClick: function(e) {
-        console.log("feedback clicked");
-        console.log(e);
+        this.set('feedback.submitted', true);
       },
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');

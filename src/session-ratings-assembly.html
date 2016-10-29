@@ -3,6 +3,7 @@
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-label/iron-label.html">
 
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
@@ -23,28 +24,37 @@
       ratings-element {
         font-size: 3em;
       }
+      .hidden {
+        display: none;
+      }
     </style>
-    <div>
-      Польза
-    </div>
-    <div layout horizontal>
-      <iron-icon icon="icons:build"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.useful}}"></ratings-element>
-    </div>
-    <div>
-      Интерес
-    </div>
-    <div layout horizontal>
-      <iron-icon icon="editor:insert-emoticon"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.interesting}}"></ratings-element>
-    </div>
-    <div>
-      Наглядность
-    </div>
-    <div layout horizontal>
-      <iron-icon icon="icons:visibility"></iron-icon>
-      <ratings-element readonly?=[[readonly]] rating="{{ratings.presentable}}"></ratings-element>
-    </div>
+    <iron-label>
+      <div class="caption">
+        Польза
+      </div>
+      <div layout horizontal>
+        <iron-icon icon="icons:build"></iron-icon>
+        <ratings-element iron-label-target readonly$=[[readonly]] rating="{{ratings.useful}}"></ratings-element>
+      </div>
+    </iron-label>
+    <iron-label>
+      <div class="caption">
+        Интерес
+      </div>
+      <div layout horizontal>
+        <iron-icon icon="editor:insert-emoticon"></iron-icon>
+        <ratings-element iron-label-target readonly$=[[readonly]] rating="{{ratings.interesting}}"></ratings-element>
+      </div>
+    </iron-label>
+    <iron-label>
+      <div class="caption">
+        Наглядность
+      </div>
+      <div layout horizontal>
+        <iron-icon icon="icons:visibility"></iron-icon>
+        <ratings-element iron-label-target readonly$=[[readonly]] rating="{{ratings.presentable}}"></ratings-element>
+      </div>
+    </iron-label>
   </template>
   <script>
     Polymer({
@@ -60,8 +70,15 @@
         },
         readonly: {
           type: Boolean,
-          readonly: true,
           reflectToAttribute: true,
+          observer: '_readonlyChanged',
+        }
+      },
+      _readonlyChanged: function() {
+        var list = this.querySelectorAll('div.caption');
+        console.log(list);
+        for (i = 0; i < list.length; i++) {
+          this.toggleClass('hidden', this.readonly, list[i]);
         }
       },
     });

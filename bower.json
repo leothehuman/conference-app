@@ -26,7 +26,8 @@
     "lazy-imports": "Polymer/lazy-imports#^0.0.2",
     "paper-dialog": "PolymerElements/paper-dialog#^1.1.0",
     "moment": "moment/moment#^2.15.1",
-    "paper-input": "PolymerElements/paper-input#^1.1.20"
+    "paper-input": "PolymerElements/paper-input#^1.1.20",
+    "iron-label": "PolymerElements/iron-label#^1.0.2"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

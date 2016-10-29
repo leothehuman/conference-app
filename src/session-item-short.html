@@ -84,7 +84,10 @@
         return new moment(time).format('HH:mm');
       },
       openSession: function() {
-        window.location = '/session/' + this.session.$key;
+        if (this.session.feedback)
+        {
+          window.location = '/session/' + this.session.$key;
+        }
       }
     });
   </script>
