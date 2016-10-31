@@ -76,7 +76,6 @@
       },
       _readonlyChanged: function() {
         var list = this.querySelectorAll('div.caption');
-        console.log(list);
         for (i = 0; i < list.length; i++) {
           this.toggleClass('hidden', this.readonly, list[i]);
         }

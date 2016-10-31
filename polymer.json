@@ -2,9 +2,9 @@
   "entrypoint": "index.html",
   "shell": "src/conference-app.html",
   "fragments": [
+    "src/conference-overview.html",
     "src/conference-schedule.html",
-    "src/conference-view2.html",
-    "src/conference-view3.html"
+    "src/session-detail.html"
   ],
   "sourceGlobs": [
    "src/**/*",

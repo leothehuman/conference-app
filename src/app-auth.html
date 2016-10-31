@@ -48,11 +48,9 @@
       },
 
       signIn: function() {
-        console.log("Signing in");
         this.$.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
       },
       signOut: function() {
-        console.log("Signing out");
         this.$.auth.signOut();
       },
     });

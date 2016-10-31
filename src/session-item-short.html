@@ -20,6 +20,9 @@
         display: block;
         padding: 0px;
       }
+      :host([clickable]) {
+        cursor: pointer;
+      }
       .time {
         display: inline-block;
         font-size: smaller;
@@ -64,9 +67,12 @@
           type: Object,
           reflectToAttribute: true,
         },
-        feedback: {
-          type: Object,
+        clickable: {
+          type: Boolean,
+          readOnly: true,
+          notify: true,
           reflectToAttribute: true,
+          computed: '_computeClickable(session)',
         },
       },
       _computeFeedbackClass: function(session) {
@@ -76,12 +82,11 @@
           return "hidden";
         return "active";
       },
-      _feedbackClick: function(e) {
-        console.log("feedback clicked");
-        console.log(e);
-      },
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');
+      },
+      _computeClickable: function() {
+        return this.session && this.session.feedback;
       },
       openSession: function() {
         if (this.session.feedback)
