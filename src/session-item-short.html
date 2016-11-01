@@ -32,26 +32,36 @@
         color: gray;
         font-size: smaller;
       }
-      paper-icon-button {
+      paper-icon-button.active {
         color: red;
       }
-      .hidden {
+      paper-icon-button.hidden {
         display: none;
+      }
+      paper-icon-button.done {
+        color: gray;
       }
     </style>
 
-    <div class="layout vertical flex" on-tap="openSession">
-      <div class="flex">
-        <div class="time">[[_formatTime(session.time)]]</div>
-        <div class="presenter flex">
-          <span>[[presenter.first_name]]</span>
-          <span>[[presenter.last_name]]</span>
+    
+
+    <div class="layout horizontal" on-tap="openSession">
+      <div class="layout vertical flex">
+        <div class="flex">
+          <div class="time">[[_formatTime(session.time)]]</div>
+          <div class="presenter flex">
+            <span>[[presenter.first_name]]</span>
+            <span>[[presenter.last_name]]</span>
+          </div>
         </div>
+        <div class="title">[[session.title]]</div>
       </div>
-      <div class="title">[[session.title]]</div>
-    </div>
-    <div>
-      <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session)}}"></paper-icon-button>
+      <template is="dom-if" if="{{uid}}">
+      <div>
+        <firebase-document path="/feedback/[[conferenceId]]/[[session.$key]]/[[uid]]" data="{{feedback}}"></firebase-document>
+        <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session, uid, feedback)}}"></paper-icon-button>
+      </div>
+      </template>
     </div>
   </template>
 
@@ -59,6 +69,10 @@
     Polymer({
       is: 'session-item-short',
       properties: {
+        uid: {
+          type: String,
+          reflectToAttribute: true,
+        },
         session: {
           type: Object,
           reflectToAttribute: true,
@@ -67,19 +81,31 @@
           type: Object,
           reflectToAttribute: true,
         },
+        feedback: {
+          type: Object,
+          reflectToAttribute: true,
+        },
         clickable: {
           type: Boolean,
+          reflectToAttribute: true,
           readOnly: true,
           notify: true,
-          reflectToAttribute: true,
           computed: '_computeClickable(session)',
         },
       },
-      _computeFeedbackClass: function(session) {
-        if (!session.started)
+      _computeFeedbackClass: function(session, uid, feedback) {
+        if (!session.feedback) {
           return "hidden";
-        if (!this.user)
+        }
+        if (!uid) {
+          console.log("user is undefined " + session.$key);
           return "hidden";
+        }
+        if (feedback.submitted)
+        {
+          console.log("feedback provided " + session.$key);
+          return "done";
+        }
         return "active";
       },
       _formatTime: function(time) {

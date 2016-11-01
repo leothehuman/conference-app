@@ -10,8 +10,7 @@
         padding-top: 4px;
         padding-bottom: 3px;
       }
-      :host([readonly])
-      {
+      :host([readonly]) {
         cursor: default;
       }
       :host([rating="1"]) > .one,
@@ -35,6 +34,7 @@
         padding: 4px 8px;
       }
     </style>
+    <!-- ⭑ -->
     <span class="one">⭑</span>
     <span class="two">⭑</span>
     <span class="three">⭑</span>
@@ -57,9 +57,6 @@
         }
       },
       ready: function() {
-        // defer until after render!
-        if (this.readonly)
-          return;
         Polymer.RenderStatus.afterNextRender(this, function() {
           if (this.tabIndex < 0) {
             this.tabIndex = 0;
@@ -72,8 +69,9 @@
         });
       },
       _downHandler: function(e) {
-        if (this.readonly)
+        if (this.readonly) {
           return;
+        }
         var target = Polymer.dom(e).rootTarget;
         if (target.localName == 'span') {
           var i = Array.from(Polymer.dom(this.root).querySelectorAll('span')).indexOf(target);
@@ -87,8 +85,9 @@
         }
       },
       _keyHandler: function(e) {
-        if (this.readonly)
+        if (this.readonly) {
           return;
+        }
         var current = this.rating || 1;
         if (e.keyCode == 37) {
           this.rating = Math.max(current - 1, 1);
