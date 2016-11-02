@@ -43,8 +43,6 @@
       }
     </style>
 
-    
-
     <div class="layout horizontal" on-tap="openSession">
       <div class="layout vertical flex">
         <div class="flex">
@@ -56,12 +54,16 @@
         </div>
         <div class="title">[[session.title]]</div>
       </div>
-      <template is="dom-if" if="{{uid}}">
-      <div>
-        <firebase-document path="/feedback/[[conferenceId]]/[[session.$key]]/[[uid]]" data="{{feedback}}"></firebase-document>
-        <paper-icon-button id="{{session.$key}}" icon="icons:feedback" class$="{{_computeFeedbackClass(session, uid, feedback)}}"></paper-icon-button>
+      <div hidden$={{!clickable}}>
+        <firebase-document path="/feedback/[[conferenceId]]/[[session.$key]]/[[uid]]" data="{{feedbackLive}}"></firebase-document>
+        <app-indexeddb-mirror
+          session="[[uid]]"
+          key="/feedback/[[conferenceId]]/[[session.$key]]/[[uid]]"
+          data="{{feedbackLive}}"
+          persisted-data="{{feedback}}">
+        </app-indexeddb-mirror>
+        <paper-icon-button icon="icons:feedback" class$="{{_computeFeedbackClass(session, loggedIn, feedback)}}"></paper-icon-button>
       </div>
-      </template>
     </div>
   </template>
 
@@ -73,9 +75,15 @@
           type: String,
           reflectToAttribute: true,
         },
+        loggedIn: {
+          type: Boolean,
+          computed: '_computeLoggedIn(uid)',
+          value: function() { return false; },
+        },
         session: {
           type: Object,
           reflectToAttribute: true,
+          notify: true,
         },
         presenter: {
           type: Object,
@@ -90,29 +98,32 @@
           reflectToAttribute: true,
           readOnly: true,
           notify: true,
-          computed: '_computeClickable(session)',
+          computed: '_computeClickable(session.feedback)',
         },
       },
-      _computeFeedbackClass: function(session, uid, feedback) {
+      _computeLoggedIn: function(newValue, oldValue) {
+        return newValue ? true : false;
+      },
+      _computeFeedbackClass: function(session, loggedIn, feedback) {
+        // this session is not requiring any feedback
         if (!session.feedback) {
           return "hidden";
         }
-        if (!uid) {
-          console.log("user is undefined " + session.$key);
+        // no user to ask for feedback
+        if (!loggedIn) {
           return "hidden";
         }
-        if (feedback.submitted)
-        {
-          console.log("feedback provided " + session.$key);
-          return "done";
+        // this looks like valid feedback
+        if (feedback.interesting && feedback.presentable && feedback.useful) {
+          return "hidden";
         }
         return "active";
       },
       _formatTime: function(time) {
         return new moment(time).format('HH:mm');
       },
-      _computeClickable: function() {
-        return this.session && this.session.feedback;
+      _computeClickable: function(feedback) {
+        return feedback;
       },
       openSession: function() {
         if (this.session.feedback)

@@ -1,6 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 
+<link rel="import" href="../bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
+
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 
@@ -55,7 +57,14 @@
         database-url="https://magicjudge-d3dda.firebaseio.com"
         storage-bucket="magicjudge-d3dda.appspot.com">
     </firebase-app>
-    <firebase-document path="/conferences/[[conferenceId]]" data="{{conference}}"></firebase-document>
+    <firebase-document path="/conferences/[[conferenceId]]" data="{{conferenceLive}}"></firebase-document>
+    <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/conferences/[[conferenceId]]"
+      data="{{conferenceLive}}"
+      persisted-data="{{conference}}">
+    </app-indexeddb-mirror>
+
 
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -64,8 +73,21 @@
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessions}}" order-by-child="time"></firebase-query>
-    <firebase-document path="/presenters/[[conferenceId]]" data="{{presenters}}"></firebase-document>
+    <firebase-query id="sessions" path="/sessions/[[conferenceId]]" data="{{sessionsLive}}" order-by-child="time"></firebase-query>
+    <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/sessions/[[conferenceId]]"
+      data="{{sessionsLive}}"
+      persisted-data="{{sessions}}">
+    </app-indexeddb-mirror>
+
+    <firebase-document path="/presenters/[[conferenceId]]" data="{{presentersLive}}"></firebase-document>
+    <app-indexeddb-mirror
+      session="[[uid]]"
+      key="/presenters/[[conferenceId]]"
+      data="{{presentersLive}}"
+      persisted-data="{{presenters}}">
+    </app-indexeddb-mirror>
 
     <paper-drawer-panel is="div" fullbleed class="flex">
 
@@ -99,7 +121,7 @@
 
           <conference-overview 
             name="overview"
-            user="[[user]]"
+            uid="[[uid]]"
             sessions="[[sessions]]"
             presenters="[[presenters]]"
             conference-id="[[conferenceId]]"
@@ -108,7 +130,7 @@
 
           <conference-schedule 
             name="schedule"
-            user="[[user]]"
+            uid="[[uid]]"
             sessions="[[sessions]]"
             presenters="[[presenters]]"
             conference-id="[[conferenceId]]">
@@ -116,7 +138,7 @@
 
           <session-detail
             name="session"
-            user="[[user]]"
+            uid="[[uid]]"
             conference-id="[[conferenceId]]"
             route="[[subroute]]">
           </session-detail>
@@ -149,6 +171,11 @@
           reflectToAttribute: true,
           notify: true,
         },
+        uid: {
+          type: String,
+          computed: '_getUid(user)',
+          notify: true,
+        },
         sessions: {
           type: Object,
           reflectToAttribute: true,
@@ -163,10 +190,12 @@
         '_routePageChanged(routeData.page)',
       ],
 
+      _getUid: function(user) {
+        return user ? user.uid : undefined;
+      },
       _routePageChanged: function(page) {
         this.page = (page === 'overview' || page === 'schedule' || page === 'session') ? page : 'overview';
       },
-
       _pageChanged: function(page) {
         this.importLazyGroup(page);
       },

@@ -35,9 +35,9 @@
         <template is="dom-repeat" items="{{sessions}}" as="session">
           <li class="layout horizontal">
             <session-item-short
+              uid="[[uid]]"
               session="[[session]]"
               presenter="[[_getPresenter(presenters, session)]]"
-              uid="[[user.uid]]"
               conference-id="[[conferenceId]]">
             </session-item-short>
           </li>
@@ -63,10 +63,9 @@
           type: Object,
           reflectToAttribute: true,
         },
-        user: {
-          type: Object,
+        uid: {
+          type: String,
           reflectToAttribute: true,
-          notify: true,
         },
       },
       _getPresenter: function(presenters, session)
